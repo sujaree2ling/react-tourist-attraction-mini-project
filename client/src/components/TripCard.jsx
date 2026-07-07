@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./TripCard.css";
 
 function TripCard(props) {
@@ -7,6 +8,7 @@ function TripCard(props) {
   const photos = trip.photos;
   const tags = trip.tags;
   const url = trip.url;
+  const [isCopied, setIsCopied] = useState(false);
 
   const mainPhoto = photos[0];
   const photo2 = photos[1];
@@ -21,8 +23,33 @@ function TripCard(props) {
     showReadMore = true;
   }
 
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(
+        function () {},
+        function () {}
+      );
+      return;
+    }
+
+    const textarea = document.createElement("textarea");
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand("copy");
+    document.body.removeChild(textarea);
+  }
+
   function handleTagClick(tag) {
     props.onTagClick(tag);
+  }
+
+  function handleCopyClick() {
+    copyToClipboard(url);
+    setIsCopied(true);
+    setTimeout(function () {
+      setIsCopied(false);
+    }, 1500);
   }
 
   return (
@@ -79,14 +106,44 @@ function TripCard(props) {
             <img className="trip-card__thumbnail" src={photo4} alt="" />
           </div>
 
-          <a
-            className="trip-card__copy-link"
-            href={url}
-            target="_blank"
-            rel="noreferrer"
-          >
-            🔗
-          </a>
+          <div className="trip-card__copy">
+            {isCopied && (
+              <span className="trip-card__copied" role="status">
+                This link has been copied to your clipboard.
+              </span>
+            )}
+            <button
+              className="trip-card__copy-link"
+              type="button"
+              onClick={handleCopyClick}
+              aria-label="คัดลอกลิงก์"
+            >
+              <svg
+                className="trip-card__copy-icon"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </article>
