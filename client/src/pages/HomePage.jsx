@@ -8,6 +8,10 @@ function HomePage() {
   const [trips, setTrips] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
 
+  function splitKeywords(text) {
+    return text.trim().split(/\s+/).filter(Boolean);
+  }
+
 
   async function getData(value) {
     try {
@@ -26,7 +30,13 @@ function HomePage() {
   }, [searchKeyword]);
 
   function handleTagClick(tag) {
-    setSearchKeyword(tag);
+    const existing = splitKeywords(searchKeyword);
+    const isAlreadyIncluded = existing.includes(tag);
+
+    if (isAlreadyIncluded) return;
+
+    const nextKeyword = existing.length === 0 ? tag : existing.join(" ") + " " + tag;
+    setSearchKeyword(nextKeyword);
   }
 
   return (
