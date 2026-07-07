@@ -14,7 +14,6 @@ function TripList(props) {
           <TripCard
             key={trip.eid}
             trip={trip}
-            onReadMore={props.onReadMore}
             onTagClick={props.onTagClick}
           />
         );
