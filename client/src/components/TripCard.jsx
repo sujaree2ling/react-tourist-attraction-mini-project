@@ -7,7 +7,6 @@ function TripCard(props) {
   const photos = trip.photos;
   const tags = trip.tags;
   const url = trip.url;
-  const eid = trip.eid;
 
   const mainPhoto = photos[0];
   const photo2 = photos[1];
@@ -22,10 +21,6 @@ function TripCard(props) {
     showReadMore = true;
   }
 
-  function handleReadMoreClick() {
-    props.onReadMore(eid);
-  }
-
   function handleTagClick(tag) {
     props.onTagClick(tag);
   }
@@ -35,19 +30,24 @@ function TripCard(props) {
       <img className="trip-card__image" src={mainPhoto} alt={title} />
 
       <div className="trip-card__content">
-        <h2 className="trip-card__title">{title}</h2>
+        <h2 className="trip-card__title">
+          <a href={url} target="_blank" rel="noreferrer">
+            {title}
+          </a>
+        </h2>
 
         <p className="trip-card__description">
           {previewText}
           {showReadMore && "..."}
           {showReadMore && (
-            <button
-              type="button"
+            <a
               className="trip-card__read-more"
-              onClick={handleReadMoreClick}
+              href={url}
+              target="_blank"
+              rel="noreferrer"
             >
               อ่านต่อ
-            </button>
+            </a>
           )}
         </p>
 

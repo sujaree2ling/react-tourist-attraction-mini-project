@@ -8,10 +8,12 @@ function HomePage() {
   const [trips, setTrips] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
 
+
   async function getData(value) {
     try {
+      const encodedValue = encodeURIComponent(value);
       const response = await axios.get(
-        `http://localhost:4001/trips?keywords=${value}`
+        `http://localhost:4001/trips?keywords=${encodedValue}`
       );
       setTrips(response.data.data);
     } catch (error) {
@@ -19,16 +21,12 @@ function HomePage() {
     }
   }
 
-useEffect(()=> {getData(searchKeyword)}, [searchKeyword])
-
-  function handleReadMore(eid) {
-    console.log("อ่านต่อ:", eid);
-    // ตรงนี้ค่อยเพิ่ม navigate ไปหน้ารายละเอียด (เรียน React Router เพิ่มแล้วค่อยทำ)
-  }
+  useEffect(function () {
+    getData(searchKeyword);
+  }, [searchKeyword]);
 
   function handleTagClick(tag) {
     setSearchKeyword(tag);
-    // ตรงนี้ค่อยเพิ่ม fetch ข้อมูลด้วย tag แล้วใช้ setTrips(...)
   }
 
   return (
@@ -41,7 +39,6 @@ useEffect(()=> {getData(searchKeyword)}, [searchKeyword])
 
         <TripList
           trips={trips}
-          onReadMore={handleReadMore}
           onTagClick={handleTagClick}
         />
       </div>
