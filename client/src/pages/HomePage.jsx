@@ -11,8 +11,9 @@ function HomePage() {
 
   async function getData(value) {
     try {
+      const encodedValue = encodeURIComponent(value);
       const response = await axios.get(
-        `http://localhost:4001/trips?keywords=${value}`
+        `http://localhost:4001/trips?keywords=${encodedValue}`
       );
       setTrips(response.data.data);
     } catch (error) {
